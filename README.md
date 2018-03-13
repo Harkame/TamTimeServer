@@ -1,8 +1,11 @@
 # TamTimeServer
 
-##Dependencies
+Dependencies
+=
 Flask
 
-##Execution
+Execution
+=
+
 export FLASK_APP=src/server.py
 flask run
