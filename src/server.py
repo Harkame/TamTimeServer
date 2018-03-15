@@ -1,12 +1,12 @@
 import json
 import sqlite3
-
+import datetime
 from flask import Flask, request
 
 app = Flask(__name__)
 
-t_connection = sqlite3.connect("./database/tamtime_database.db")
-t_cursor = t_connection.cursor()
+database = sqlite3.connect("./database/tamtime_database.db")
+cursor = database.cursor()
 print("[Database connection OK]");
 
 #TODO : Move this class in tram.py
@@ -27,32 +27,57 @@ class Report(object):
 #http://localhost:5000/get_trams
 @app.route("/trams", methods=['GET'])
 def get_trams():
-    t_cursor.execute("SELECT * FROM tram")
+    cursor.execute("SELECT * FROM tram")
 
-    t_trams = list()
+    trams = list()
 
-    for t_tram in t_cursor.fetchall():
-        t_trams.append(Tram(t_tram[0], t_tram[1])) #Parsing of tuple to object
+    for tram in cursor.fetchall():
+        trams.append(Tram(tram[0], tram[1])) #Parsing of tuple to object
 
-    return json.dumps([ob.__dict__ for ob in t_trams])
+    return json.dumps([ob.__dict__ for ob in trams])
 
 #http://localhost:5000/reports
 @app.route("/reports", methods=['GET'])
 def get_reports():
-    t_cursor.execute("SELECT * FROM report")
+    cursor.execute("SELECT *, (SELECT COUNT(*) FROM report_confirm WHERE report_confirm.report_id = report.id) AS confirm FROM report")
 
     t_reports = list()
 
-    for t_report in t_cursor.fetchall():
+    for t_report in cursor.fetchall():
         t_reports.append(Report(t_report[0], t_report[1], t_report[2], t_report[3], t_report[4], t_report[5])) #Parsing of tuple to object
 
     return json.dumps([ob.__dict__ for ob in t_reports])
 
-#http://localhost:5000/report?report_id=42&report_stop=1&report_type=1&report_message="controleur"&report_date="26/04/2018"&report_confirm=1
+#http://localhost:5000/report?stop=1&type=1&message="controleur"
 @app.route("/report", methods=['POST'])
 def post_report():
-    t_report = Report(int(request.args.get("report_id", None)), int(request.args.get("report_stop", None)), int(request.args.get("report_type", None)), request.args.get("report_message", None), request.args.get("report_date", None), int(request.args.get("report_confirm", None)))
+    stop_id = int(request.args.get("stop", None))
+    report_type = int(request.args.get("type", None))
+    message = request.args.get("message", "")
 
-    t_cursor.execute("INSERT INTO report (report_id, report_stop, report_type, report_message, report_date, report_confirm) VALUES (?, ?, ?, ?, ?, ?)", (t_report.id, t_report.stop,  t_report.type, t_report.message, t_report.date, t_report.confirm))
-    t_connection.commit()
-    return "ok";
+    if stop_id is None or report_type is None:
+        return "", 400
+
+    cursor.execute("INSERT INTO report (stop_id, type, message) VALUES (?, ?, ?)",
+        (stop_id, report_type, message))
+    database.commit()
+    return "", 200
+
+#http://localhost:5000/confirm?id=2O
+@app.route("/confirm", methods=['POST'])
+def confirm_report():
+    report_id = int(request.args.get("id", None))
+    ip_adress = request.remote_addr
+
+    if report_id is None:
+        return "", 400
+
+    cursor.execute("INSERT INTO report_confirm (report_id, ip_adress) VALUES (?, ?)",
+        (report_id, ip_adress))
+    database.commit()
+
+@app.teardown_request
+def clean_old_reports(response):
+    cursor.execute("DELETE FROM report WHERE report.date < date('now','-6 hours')")
+    database.commit()
+
