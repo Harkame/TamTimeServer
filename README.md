@@ -1,5 +1,7 @@
 # TamTimeServer
 
+Server of https://github.com/flyingrub/TamTime
+
 Dependencies
 =
 Flask
