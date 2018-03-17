@@ -72,9 +72,14 @@ def confirm_report():
     if report_id is None:
         return "", 400
 
-    cursor.execute("INSERT INTO report_confirm (report_id, ip_adress) VALUES (?, ?)",
-        (report_id, ip_adress))
+    try:
+        cursor.execute("INSERT INTO report_confirm (report_id, ip_adress) VALUES (?, ?)",
+            (report_id, ip_adress))
+    except sqlite3.IntegrityError:
+        return "", 403
+
     database.commit()
+    return "",200
 
 @app.teardown_request
 def clean_old_reports(response):
