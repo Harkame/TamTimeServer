@@ -51,12 +51,12 @@ def get_reports():
 #http://localhost:5000/report?stop=1&type=1&message="controleur"
 @app.route("/report", methods=['POST'])
 def post_report():
+    if request.args.get("stop", None) is None or request.args.get("type", None) is None:
+        return "", 400
+
     stop_id = int(request.args.get("stop", None))
     report_type = int(request.args.get("type", None))
     message = request.args.get("message", "")
-
-    if stop_id is None or report_type is None:
-        return "", 400
 
     cursor.execute("INSERT INTO report (stop_id, type, message) VALUES (?, ?, ?)",
         (stop_id, report_type, message))
@@ -66,11 +66,11 @@ def post_report():
 #http://localhost:5000/confirm?id=2O
 @app.route("/confirm", methods=['POST'])
 def confirm_report():
+    if request.args.get("id", None) is None:
+        return "", 400
+
     report_id = int(request.args.get("id", None))
     ip_adress = request.remote_addr
-
-    if report_id is None:
-        return "", 400
 
     try:
         cursor.execute("INSERT INTO report_confirm (report_id, ip_adress) VALUES (?, ?)",
