@@ -23,6 +23,11 @@ class Report(object):
         self.message = p_message
         self.date = p_date
         self.confirm = p_confirm
+        
+class Stop(object):
+    def __init__(self, p_id, p_property):
+        self.id = p_id
+        self.property = p_stop
 
 #http://localhost:5000/get_trams
 @app.route("/trams", methods=['GET'])
