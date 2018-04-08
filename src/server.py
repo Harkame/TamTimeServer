@@ -99,14 +99,17 @@ def get_marks():
     marks = list()
 
     for mark in cursor.fetchall():
-        marks.append(Mark(mark[0], mark[1]), mark[2]) #Parsing of tuple to object
+        marks.append(Mark(mark[0], mark[1], mark[2])) #Parsing of tuple to object
 
     return json.dumps([ob.__dict__ for ob in marks])
 
+# TODO : Test this function
 @app.route("/mark", methods=['POST'])
 def post_mark():
+    print(request.args.get("stop_id", None))
+
     if request.args.get("stop_id", None) is None or request.args.get("mark", None) is None or request.args.get("ip_adress", None) is None:
-        return "", 400
+        return "Wrong parameters", 400
 
     stop_id = int(request.args.get("stop_id", None))
     mark = int(request.args.get("mark", None))
@@ -114,8 +117,10 @@ def post_mark():
 
     cursor.execute("INSERT INTO mark (stop_id, mark, ip_adress) VALUES (?, ?, ?)",
         (stop_id, mark, ip_adress))
+
     database.commit()
-    return "", 200
+
+    return "Mark added", 200
 
 @app.teardown_request
 def clean_old_reports(response):
