@@ -23,11 +23,17 @@ class Report(object):
         self.message = p_message
         self.date = p_date
         self.confirm = p_confirm
-        
+
 class Stop(object):
     def __init__(self, p_id, p_property):
         self.id = p_id
         self.property = p_stop
+
+class Mark(object):
+    def __init__(self, p_stop_id, p_mark, p_ip_adress):
+        self.stop_id = p_stop_id
+        self.mark = p_mark
+        self.ip_adress = p_ip_adress
 
 #http://localhost:5000/get_trams
 @app.route("/trams", methods=['GET'])
@@ -86,8 +92,32 @@ def confirm_report():
     database.commit()
     return "",200
 
+@app.route("/marks", methods=['GET'])
+def get_marks():
+    cursor.execute("SELECT * FROM mark")
+
+    marks = list()
+
+    for mark in cursor.fetchall():
+        marks.append(Mark(mark[0], mark[1]), mark[2]) #Parsing of tuple to object
+
+    return json.dumps([ob.__dict__ for ob in marks])
+
+@app.route("/mark", methods=['POST'])
+def post_mark():
+    if request.args.get("stop_id", None) is None or request.args.get("mark", None) is None or request.args.get("ip_adress", None) is None:
+        return "", 400
+
+    stop_id = int(request.args.get("stop_id", None))
+    mark = int(request.args.get("mark", None))
+    ip_adress = request.args.get("ip_adress", "")
+
+    cursor.execute("INSERT INTO mark (stop_id, mark, ip_adress) VALUES (?, ?, ?)",
+        (stop_id, mark, ip_adress))
+    database.commit()
+    return "", 200
+
 @app.teardown_request
 def clean_old_reports(response):
     cursor.execute("DELETE FROM report WHERE report.date < date('now','-6 hours')")
     database.commit()
-

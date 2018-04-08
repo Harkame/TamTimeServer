@@ -15,9 +15,12 @@ t_cursor.execute("INSERT INTO report (stop_id, type, message) VALUES (1, 1, 'Con
 t_cursor.execute("INSERT INTO report (stop_id, type, message) VALUES (1, 1, 'Controleur')")
 
 t_cursor.execute("INSERT INTO report_confirm (report_id, ip_adress) VALUES (1,'190.1.1.1')")
-t_cursor.execute("INSERT INTO report_confirm (report_id, ip_adress) VALUES (1,'190.1.1.1')")
-t_cursor.execute("INSERT INTO report_confirm (report_id, ip_adress) VALUES (2,'190.1.1.1')")
+t_cursor.execute("INSERT INTO report_confirm (report_id, ip_adress) VALUES (1,'190.1.11.1')")
+t_cursor.execute("INSERT INTO report_confirm (report_id, ip_adress) VALUES (2,'190.17.1.1')")
 
+t_cursor.execute("INSERT INTO mark (stop_id, mark, ip_adress) VALUES (1, 3,'190.1.1.1')")
+t_cursor.execute("INSERT INTO mark (stop_id, mark, ip_adress) VALUES (1, 1,'190.98.12.1')")
+t_cursor.execute("INSERT INTO mark (stop_id, mark, ip_adress) VALUES (2, 4,'190.14.1.1')")
 
 t_connection.commit()
 
