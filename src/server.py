@@ -108,37 +108,16 @@ def get_marks_average():
 
     return json.dumps([ob.__dict__ for ob in marks])
 
-#http://127.0.0.1:5000/mark_average_by_stop_id?stop_id=1
-@app.route("/mark_average_by_stop_id", methods=['GET'])
-def get_mark_average_by_stop_id():
-
-    if request.args.get("stop_id", None) is None:
-        return "Wrong parameters", 400
-
-    stop_id = request.args.get('stop_id')
-
-    cursor.execute("SELECT stop_id, AVG(mark) AS average_mark FROM mark WHERE stop_id = (?)", stop_id)
-
-    marks = list()
-
-    for mark in cursor.fetchall():
-        marks.append(MarkAverage(mark[0], mark[1])) #Parsing of tuple to object
-
-    return json.dumps([ob.__dict__ for ob in marks])
-
-# TODO : Test this function
 @app.route("/mark", methods=['POST'])
 def post_mark():
-    print(request.args.get("stop_id", None))
-
-    if request.args.get("stop_id", None) is None or request.args.get("mark", None) is None or request.args.get("ip_adress", None) is None:
+    if request.args.get("stop_id", None) is None or request.args.get("mark", None) is None or request.args.get("android_id", None) is None:
         return "Wrong parameters", 400
 
     stop_id = int(request.args.get("stop_id", None))
     mark = int(request.args.get("mark", None))
-    ip_adress = request.args.get("ip_adress", "")
+    ip_adress = request.args.get("android_id", "")
 
-    cursor.execute("INSERT INTO mark (stop_id, mark, ip_adress) VALUES (?, ?, ?)",
+    cursor.execute("INSERT INTO mark (stop_id, mark, android_id) VALUES (?, ?, ?)",
         (stop_id, mark, ip_adress))
 
     database.commit()
