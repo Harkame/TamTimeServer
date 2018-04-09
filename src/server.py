@@ -35,6 +35,11 @@ class Mark(object):
         self.mark = p_mark
         self.ip_adress = p_ip_adress
 
+class MarkAverage(object):
+    def __init__(self, p_stop_id, p_mark_average):
+        self.stop_id = p_stop_id
+        self.mark_average = p_mark_average
+
 #http://localhost:5000/get_trams
 @app.route("/trams", methods=['GET'])
 def get_trams():
@@ -92,14 +97,14 @@ def confirm_report():
     database.commit()
     return "",200
 
-@app.route("/marks", methods=['GET'])
-def get_marks():
-    cursor.execute("SELECT * FROM mark")
+@app.route("/marks_average", methods=['GET'])
+def get_marks_average():
+    cursor.execute("SELECT stop_id, AVG(mark) AS average_mark FROM mark GROUP BY stop_id")
 
     marks = list()
 
     for mark in cursor.fetchall():
-        marks.append(Mark(mark[0], mark[1], mark[2])) #Parsing of tuple to object
+        marks.append(MarkAverage(mark[0], mark[1])) #Parsing of tuple to object
 
     return json.dumps([ob.__dict__ for ob in marks])
 
