@@ -18,9 +18,8 @@ t_cursor.execute("INSERT INTO report_confirm (report_id, ip_adress) VALUES (1,'1
 t_cursor.execute("INSERT INTO report_confirm (report_id, ip_adress) VALUES (1,'190.1.11.1')")
 t_cursor.execute("INSERT INTO report_confirm (report_id, ip_adress) VALUES (2,'190.17.1.1')")
 
-t_cursor.execute("INSERT INTO mark (stop_id, mark, android_id) VALUES (1, 3,'fzea4897grefez')")
-t_cursor.execute("INSERT INTO mark (stop_id, mark, android_id) VALUES (1, 1,'rezgfzec147ze')")
-t_cursor.execute("INSERT INTO mark (stop_id, mark, android_id) VALUES (2, 4,'9htrhrtg4efez')")
+t_cursor.execute("INSERT INTO mark (stop_id, mark, android_id) VALUES (399, 3,'fzea4897grefez')") #Mosson
+t_cursor.execute("INSERT INTO mark (stop_id, mark, android_id) VALUES (399, 2,'qzgregeezfszaz')") #Mosson
 
 t_connection.commit()
 
