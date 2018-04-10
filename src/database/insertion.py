@@ -21,6 +21,8 @@ t_cursor.execute("INSERT INTO report_confirm (report_id, ip_adress) VALUES (2,'1
 t_cursor.execute("INSERT INTO mark (stop_id, mark, android_id) VALUES (399, 3,'fzea4897grefez')") #Mosson
 t_cursor.execute("INSERT INTO mark (stop_id, mark, android_id) VALUES (399, 2,'qzgregeezfszaz')") #Mosson
 
+t_cursor.execute("INSERT INTO mark (stop_id, mark, android_id) VALUES (206, 3,'fzea4897grefez')") #Agropolis
+
 t_connection.commit()
 
 t_connection.close();
