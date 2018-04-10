@@ -117,7 +117,7 @@ def post_mark():
     mark = int(request.args.get("mark", None))
     ip_adress = request.args.get("android_id", "")
 
-    cursor.execute("INSERT INTO mark (stop_id, mark, android_id) VALUES (?, ?, ?)",
+    cursor.execute("INSERT OR REPLACE INTO mark (stop_id, mark, android_id) VALUES (?, ?, ?)",
         (stop_id, mark, ip_adress))
 
     database.commit()
