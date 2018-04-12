@@ -17,7 +17,7 @@ python ./src/database/database_insertion.py
 
 export FLASK_APP=src/server.py
 
-flask run --host 0.0.0.0
+flask run --host=0.0.0.0
 
 OR
 
