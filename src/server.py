@@ -3,12 +3,38 @@ import sqlite3
 import datetime
 from flask import Flask, request
 
-from models.tram import Tram
-from models.mark import Mark
-from models.mark_average import MarkAverage
-from models.report import Report
-
 app = Flask(__name__)
+
+class Stop(object):
+    def __init__(self, p_id, p_property):
+        self.id = p_id
+        self.property = p_stop
+
+
+class Tram(object):
+    def __init__(self, p_id, p_occupation):
+        self.id = p_id
+        self.occupation = p_occupation
+
+class Mark(object):
+    def __init__(self, p_stop_id, p_mark, p_ip_adress):
+        self.stop_id = p_stop_id
+        self.mark = p_mark
+        self.ip_adress = p_ip_adress
+
+class MarkAverage(object):
+    def __init__(self, p_stop_id, p_mark_average):
+        self.stop_id = p_stop_id
+        self.mark_average = p_mark_average
+
+class Report(object):
+    def __init__(self, p_id, p_stop, p_type, p_message, p_date, p_confirm):
+        self.id = p_id
+        self.stop = p_stop
+        self.type = p_type
+        self.message = p_message
+        self.date = p_date
+        self.confirm = p_confirm
 
 database = sqlite3.connect("./database/tamtime_database.db")
 cursor = database.cursor()
