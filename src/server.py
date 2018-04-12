@@ -97,6 +97,7 @@ def confirm_report():
     database.commit()
     return "",200
 
+#http://localhost:5000/marks_average
 @app.route("/marks_average", methods=['GET'])
 def get_marks_average():
     cursor.execute("SELECT stop_id, AVG(mark) AS average_mark FROM mark GROUP BY stop_id")
