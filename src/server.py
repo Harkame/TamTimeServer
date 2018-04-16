@@ -91,11 +91,12 @@ def post_mark():
     if request.args.get("stop_id", None) is None or request.args.get("mark", None) is None or request.args.get("android_id", None) is None:
         return "Wrong parameters", 400
 
-    stop_id = int(request.args.get("stop_id", None))
     mark = int(request.args.get("mark", None))
 
     if mark < 0 or mark > Mark.MARK_LIMIT:
         return "Not valid mark", 400
+
+    stop_id = int(request.args.get("stop_id", None))
 
     ip_adress = request.args.get("android_id", "")
 
