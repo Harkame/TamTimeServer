@@ -84,7 +84,7 @@ def get_marks_average():
 
     return json.dumps([ob.__dict__ for ob in marks])
 
-#http://localhost:5000/mark?stop_id=9&mark=1&android_id="gekrgkr"
+#http://localhost:5000/mark?stop_id=9&mark=1987&android_id="gekrgkr"
 #http://localhost:5000/mark?stop_id=4&mark=1&android_id="gekrgkr"
 @app.route("/mark", methods=['POST'])
 def post_mark():
