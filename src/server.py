@@ -84,6 +84,8 @@ def get_marks_average():
 
     return json.dumps([ob.__dict__ for ob in marks])
 
+#http://localhost:5000/mark?stop_id=9&mark=1&android_id="gekrgkr"
+#http://localhost:5000/mark?stop_id=4&mark=1&android_id="gekrgkr"
 @app.route("/mark", methods=['POST'])
 def post_mark():
     if request.args.get("stop_id", None) is None or request.args.get("mark", None) is None or request.args.get("android_id", None) is None:
@@ -91,6 +93,10 @@ def post_mark():
 
     stop_id = int(request.args.get("stop_id", None))
     mark = int(request.args.get("mark", None))
+
+    if mark < 0 or mark > Mark.MARK_LIMIT:
+        return "Not valid mark", 400
+
     ip_adress = request.args.get("android_id", "")
 
     cursor.execute("INSERT OR REPLACE INTO mark (stop_id, mark, android_id) VALUES (?, ?, ?)",
