@@ -80,7 +80,6 @@ def get_marks_average():
     marks_average = list()
 
     for mark_average in cursor.fetchall():
-        print(mark_average)
         marks_average.append(MarkAverage(mark_average[0], mark_average[1], mark_average[2])) #Parsing of tuple to object
 
     return json.dumps([ob.__dict__ for ob in marks_average])
