@@ -75,14 +75,15 @@ def confirm_report():
 #http://localhost:5000/marks_average
 @app.route("/marks_average", methods=['GET'])
 def get_marks_average():
-    cursor.execute("SELECT stop_id, AVG(mark) AS average_mark FROM mark GROUP BY stop_id")
+    cursor.execute("SELECT stop_id, AVG(mark) AS mark_average, COUNT(*) AS count_marks FROM mark GROUP BY stop_id")
 
-    marks = list()
+    marks_average = list()
 
-    for mark in cursor.fetchall():
-        marks.append(MarkAverage(mark[0], mark[1])) #Parsing of tuple to object
+    for mark_average in cursor.fetchall():
+        print(mark_average)
+        marks_average.append(MarkAverage(mark_average[0], mark_average[1], mark_average[2])) #Parsing of tuple to object
 
-    return json.dumps([ob.__dict__ for ob in marks])
+    return json.dumps([ob.__dict__ for ob in marks_average])
 
 #http://localhost:5000/mark?stop_id=9&mark=1987&android_id="gekrgkr"
 #http://localhost:5000/mark?stop_id=4&mark=1&android_id="gekrgkr"
